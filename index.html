@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>AR Explorer Prototype</title>
+</head>
+<body>
+    <div class="container">
+        <h1>AR Explorer</h1>
+        <div class="input-container">
+            <input type="text" id="location-input" placeholder="Enter location">
+            <button id="search-button">Search</button>
+        </div>
+        <div class="select-container">
+            <select id="location-select">
+                <option value="">Select Location</option>
+                <option value="Eiffel_Tower">Eiffel Tower</option>
+                <option value="Charminar">Charminar</option>
+                <option value="Taj_Mahal">Taj Mahal</option>
+            </select>
+            <button id="select-button">Get Info</button>
+        </div>
+        <div id="info-container">
+            <div id="wiki-info">
+                <h2 id="landmark-name-wiki"></h2>
+                <img id="thumbnail" alt="Thumbnail" />
+                <p id="landmark-summary-wiki"></p>
+            </div>
+            <div id="google-info">
+                <h2 id="landmark-name-google"></h2>
+                <p id="landmark-rating-google"></p>
+                <p id="user-reviews-google"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
