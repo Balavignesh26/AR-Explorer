@@ -1,50 +1,89 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    font-family: 'Roboto', Arial, sans-serif;
+    background: linear-gradient(135deg, #1e1e2f 0%, #2a2a4a 100%);
+    color: #ffffff;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
 }
 
 .container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 40px auto;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 0 10px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
     display: flex;
     flex-direction: column;
     align-items: center;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+}
+
+.container:hover {
+    transform: translateZ(20px) rotateX(2deg) rotateY(2deg);
 }
 
 h1 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    color: #e0e0ff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 1px;
+    transform: translateZ(10px);
 }
 
 .input-container, .select-container {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     display: flex;
     justify-content: center;
+    width: 80%;
+    position: relative;
 }
 
 #location-input, #location-select {
-    padding: 10px;
+    padding: 12px;
     width: 70%;
-    border: 1px solid #ccc;
-    border-radius: 5px 0 0 5px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px 0 0 8px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+#location-input:focus, #location-select:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 #search-button, #select-button {
-    padding: 10px 20px;
+    padding: 12px 24px;
     border: none;
-    border-radius: 0 5px 5px 0;
-    background-color: #4CAF50;
+    border-radius: 0 8px 8px 0;
+    background: linear-gradient(45deg, #4CAF50, #66bb6a);
     color: #fff;
     cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    transform: translateZ(5px);
 }
 
 #search-button:hover, #select-button:hover {
-    background-color: #3e8e41;
+    background: linear-gradient(45deg, #3e8e41, #4CAF50);
+    transform: translateZ(10px) scale(1.05);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
 }
 
 #info-container {
@@ -52,18 +91,61 @@ h1 {
     flex-direction: row;
     justify-content: space-around;
     width: 100%;
+    gap: 20px;
+    transform: translateZ(5px);
 }
 
 #wiki-info, #google-info {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 10px;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
     width: 45%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+    transition: transform 0.3s ease;
+}
+
+#wiki-info:hover, #google-info:hover {
+    transform: translateZ(15px);
 }
 
 #thumbnail {
     width: 100%;
-    max-width: 200px;
-    margin: 10px 0;
+    max-width: 220px;
+    margin: 15px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+#thumbnail:hover {
+    transform: scale(1.1) translateZ(20px);
+}
+
+/* Neon glow effect for interactive elements */
+@keyframes neonGlow {
+    0% { box-shadow: 0 0 5px #4CAF50, 0 0 10px #4CAF50, 0 0 15px #4CAF50; }
+    100% { box-shadow: 0 0 10px #4CAF50, 0 0 20px #4CAF50, 0 0 30px #4CAF50; }
+}
+
+#search-button:active, #select-button:active {
+    animation: neonGlow 0.3s ease-in-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
+    
+    #info-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    #wiki-info, #google-info {
+        width: 90%;
+    }
 }
