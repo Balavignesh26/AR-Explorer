@@ -1,41 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="AR Explorer: Discover landmarks with augmented reality and interactive 3D visualizations">
+    <meta name="keywords" content="AR, augmented reality, landmarks, 3D modeling, exploration">
+    <meta name="author" content="AR Explorer Team">
     <link rel="stylesheet" href="style.css">
-    <title>AR Explorer Prototype</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <title>AR Explorer</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
+
 <body>
-    <div class="container">
-        <h1>AR Explorer</h1>
-        <div class="input-container">
-            <input type="text" id="location-input" placeholder="Enter location">
-            <button id="search-button">Search</button>
+    <header>
+        <div class="logo">
+            <img src="https://img.freepik.com/premium-photo/tree-with-moon-it_902049-7421.jpg" alt="AR Explorer Logo"
+                class="logo-img">
         </div>
-        <div class="select-container">
-            <select id="location-select">
-                <option value="">Select Location</option>
-                <option value="Eiffel_Tower">Eiffel Tower</option>
-                <option value="Charminar">Charminar</option>
-                <option value="Taj_Mahal">Taj Mahal</option>
-            </select>
-            <button id="select-button">Get Info</button>
+        <div class="banner">
+            <img src="https://i.scdn.co/image/ab6761610000e5eb86a1250a5c14d1d01a3f380f" alt="Spotify Logo"
+                class="banner-logo">
+            <h1>AR Explorer</h1>
+            <p class="banner-text">Discover the World in 3D</p>
         </div>
-        <div id="info-container">
-            <div id="wiki-info">
-                <h2 id="landmark-name-wiki"></h2>
-                <img id="thumbnail" alt="Thumbnail" />
-                <p id="landmark-summary-wiki"></p>
+    </header>
+
+    <main>
+        <div class="container" role="main">
+            <div class="input-container" role="search">
+                <label for="location-input" class="sr-only">Location</label>
+                <input type="text" id="location-input" placeholder="Enter a landmark or city"
+                    aria-describedby="search-hint" autocomplete="off">
+                <button id="search-button" aria-label="Search for location">Search</button>
             </div>
-            <div id="google-info">
-                <h2 id="landmark-name-google"></h2>
-                <p id="landmark-rating-google"></p>
-                <p id="user-reviews-google"></p>
+
+            <div class="select-container">
+                <select id="location-select" aria-describedby="select-hint">
+                    <option value="">Select a Landmark</option>
+                    <option value="Eiffel_Tower">Eiffel Tower, Paris</option>
+                    <option value="Charminar">Charminar, Hyderabad</option>
+                    <option value="Taj_Mahal">Taj Mahal, Agra</option>
+                </select>
+                <button id="explore-button" aria-label="Explore selected landmark">Explore</button>
             </div>
+
+            <div class="loading-container" id="loading-animation" role="status" aria-live="polite" hidden>
+                <div class="spinner"></div>
+                <p>Loading AR Experience...</p>
+            </div>
+
+            <div class="error-container" id="error-message" role="alert" hidden>
+                <p>Error loading data. Please try again.</p>
+            </div>
+
+            <div id="info-container" aria-live="polite">
+                <div id="wiki-info" class="info-card" role="region" aria-labelledby="landmark-name-wiki">
+                    <h2 id="landmark-name-wiki"></h2>
+                    <model-viewer id="ar-preview" src="" alt="3D model of landmark" ar
+                        ar-modes="webxr scene-viewer quick-look" camera-controls poster="placeholder.jpg"
+                        style="width: 100%; height: 200px;" hidden></model-viewer>
+                    <img id="thumbnail" alt="Landmark thumbnail" loading="lazy"
+                        aria-describedby="landmark-summary-wiki" />
+                    <div class="gallery" id="gallery" hidden>
+                        <img src="" alt="Gallery image 1">
+                        <img src="" alt="Gallery image 2">
+                    </div>
+                    <p id="landmark-summary-wiki"></p>
+                    <p id="fun-facts" hidden></p>
+                    <button class="ar-button" id="view-ar-button" aria-label="View in Augmented Reality">View in
+                        AR</button>
+                </div>
+                <div id="google-info" class="info-card" role="region" aria-labelledby="landmark-name-google">
+                    <h2 id="landmark-name-google"></h2>
+                    <p id="landmark-rating-google"></p>
+                    <p id="user-reviews-google"></p>
+                    <iframe id="map-preview" src="" width="100%" height="200" style="border:0;" allowfullscreen=""
+                        loading="lazy" aria-hidden="true" hidden></iframe>
+                </div>
+            </div>
+
+            <form id="feedback-form" class="feedback-form" hidden>
+                <label for="feedback-input" class="sr-only">Leave feedback</label>
+                <textarea id="feedback-input" placeholder="Suggest a landmark or report an issue"
+                    aria-describedby="feedback-hint"></textarea>
+                <button type="submit" aria-label="Submit feedback">Submit</button>
+
+            </form>
+
+            <canvas id="ar-canvas" aria-hidden="true"></canvas>
         </div>
-    </div>
+    </main>
+
+    <footer role="contentinfo">
+        <p>© 2025 AR Explorer. All rights reserved.</p>
+        <nav aria-label="Additional resources">
+            <a href="#privacy" rel="noopener">Privacy Policy</a>
+            <a href="#terms" rel="noopener">Terms of Use</a>
+        </nav>
+    </footer>
 
     <script src="script.js"></script>
 </body>
+
 </html>
