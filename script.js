@@ -1,3 +1,17 @@
+// Check if Three.js libraries are loaded
+if (typeof THREE === 'undefined') {
+    console.error('Three.js library not loaded!');
+    document.body.innerHTML = '<div style="text-align: center; padding: 50px; color: red;"><h1>Error: Three.js library not loaded</h1><p>Please check that the library files are properly loaded.</p></div>';
+}
+
+if (typeof THREE.FBXLoader === 'undefined') {
+    console.error('FBXLoader not loaded!');
+}
+
+if (typeof THREE.OrbitControls === 'undefined') {
+    console.error('OrbitControls not loaded!');
+}
+
 const GOOGLE_API_KEY = 'YOUR_GOOGLE_API_KEY';
 
 document.getElementById('search-button').addEventListener('click', () => {
@@ -10,14 +24,22 @@ document.getElementById('explore-button').addEventListener('click', () => {
     fetchLandmarkData(location.replace(' ', '_'));
 });
 
-document.getElementById('view-ar-button').addEventListener('click', () => {
-    const selectedLandmark = document.getElementById('landmark').value;
+document.getElementById('view-charminar-ar').addEventListener('click', () => {
+    // Directly show Charminar AR model
+    document.getElementById('ar-preview').style.display = 'none';
+    document.getElementById('fbx-viewer').style.display = 'block';
+    initFBXViewer('../models/charminar.fbx');
+});
 
-    if (selectedLandmark === 'Charminar') {
+document.getElementById('view-ar-button').addEventListener('click', () => {
+    // Get the current landmark name from the displayed info
+    const landmarkName = document.getElementById('landmark-name-wiki').innerText;
+    
+    if (landmarkName && landmarkName.toLowerCase().includes('charminar')) {
         // Hide model-viewer, show FBX viewer
         document.getElementById('ar-preview').style.display = 'none';
         document.getElementById('fbx-viewer').style.display = 'block';
-        initFBXViewer('models/charminar.fbx');
+        initFBXViewer('../models/charminar.fbx');
     } else {
         const arPreview = document.getElementById('ar-preview');
         if (arPreview.getAttribute('src')) {
@@ -29,33 +51,120 @@ document.getElementById('view-ar-button').addEventListener('click', () => {
 });
 
 function initFBXViewer(fbxPath) {
+    console.log('Initializing FBX viewer with path:', fbxPath);
+    
     let container = document.getElementById('fbx-viewer');
+    if (!container) {
+        console.error('FBX viewer container not found!');
+        return;
+    }
+    
     container.innerHTML = ''; // Clear previous scene if any
 
+    // Add loading indicator
+    const loadingDiv = document.createElement('div');
+    loadingDiv.innerHTML = '<div class="spinner"></div><p>Loading 3D Model...</p>';
+    loadingDiv.style.textAlign = 'center';
+    loadingDiv.style.padding = '20px';
+    container.appendChild(loadingDiv);
+
+    console.log('Creating Three.js scene...');
     let scene = new THREE.Scene();
     let camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
     camera.position.set(0, 100, 300);
 
     let renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setClearColor(0x87CEEB); // Sky blue background
     container.appendChild(renderer.domElement);
 
     let controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
 
-    let light = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
-    scene.add(light);
+    // Add lights
+    let ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+    scene.add(ambientLight);
+    
+    let directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(100, 100, 50);
+    scene.add(directionalLight);
 
+    console.log('Loading FBX file...');
     let loader = new THREE.FBXLoader();
-    loader.load(fbxPath, function (object) {
-        object.scale.set(0.1, 0.1, 0.1);
-        scene.add(object);
-    });
+    
+    loader.load(
+        fbxPath, 
+        function (object) {
+            console.log('FBX loaded successfully:', object);
+            
+            // Remove loading indicator
+            container.removeChild(loadingDiv);
+            
+            // Center the model
+            const box = new THREE.Box3().setFromObject(object);
+            const center = box.getCenter(new THREE.Vector3());
+            object.position.sub(center);
+            
+            // Scale the model appropriately - Charminar might be very large
+            const size = box.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z);
+            let scale = 100 / maxDim; // Scale to fit in 100x100x100 box
+            
+            // If the model is very small, scale it up
+            if (scale > 10) {
+                scale = 10;
+            }
+            // If the model is very large, scale it down more
+            if (scale < 0.01) {
+                scale = 0.01;
+            }
+            
+            object.scale.set(scale, scale, scale);
+            
+            scene.add(object);
+            
+            // Position camera to see the model
+            camera.position.set(0, 50, 150);
+            camera.lookAt(0, 0, 0);
+            controls.update();
+            
+            // Add success message
+            const successMsg = document.createElement('div');
+            successMsg.innerHTML = '<p style="color: green; text-align: center; padding: 10px; background: rgba(0,255,0,0.1); border-radius: 5px;">Charminar 3D model loaded successfully! Use mouse to rotate, scroll to zoom.</p>';
+            successMsg.style.cssText = 'position: absolute; top: 10px; left: 10px; right: 10px; z-index: 1000;';
+            container.appendChild(successMsg);
+            
+            // Remove success message after 5 seconds
+            setTimeout(() => {
+                if (container.contains(successMsg)) {
+                    container.removeChild(successMsg);
+                }
+            }, 5000);
+        },
+        function (progress) {
+            console.log('Loading progress:', (progress.loaded / progress.total * 100) + '%');
+        },
+        function (error) {
+            console.error('Error loading FBX:', error);
+            container.removeChild(loadingDiv);
+            container.innerHTML = '<div style="text-align: center; padding: 20px; color: red;"><p>Error loading 3D model. Please check the console for details.</p></div>';
+        }
+    );
 
     function animate() {
         requestAnimationFrame(animate);
+        controls.update();
         renderer.render(scene, camera);
     }
     animate();
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+    });
 }
 
 
