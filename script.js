@@ -11,13 +11,53 @@ document.getElementById('explore-button').addEventListener('click', () => {
 });
 
 document.getElementById('view-ar-button').addEventListener('click', () => {
-    const arPreview = document.getElementById('ar-preview');
-    if (arPreview.getAttribute('src')) {
-        arPreview.enterAR();
+    const selectedLandmark = document.getElementById('landmark').value;
+
+    if (selectedLandmark === 'Charminar') {
+        // Hide model-viewer, show FBX viewer
+        document.getElementById('ar-preview').style.display = 'none';
+        document.getElementById('fbx-viewer').style.display = 'block';
+        initFBXViewer('models/charminar.fbx');
     } else {
-        alert('AR model not available yet.');
+        const arPreview = document.getElementById('ar-preview');
+        if (arPreview.getAttribute('src')) {
+            arPreview.enterAR();
+        } else {
+            alert('AR model not available yet.');
+        }
     }
 });
+
+function initFBXViewer(fbxPath) {
+    let container = document.getElementById('fbx-viewer');
+    container.innerHTML = ''; // Clear previous scene if any
+
+    let scene = new THREE.Scene();
+    let camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+    camera.position.set(0, 100, 300);
+
+    let renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
+
+    let controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+    let light = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
+    scene.add(light);
+
+    let loader = new THREE.FBXLoader();
+    loader.load(fbxPath, function (object) {
+        object.scale.set(0.1, 0.1, 0.1);
+        scene.add(object);
+    });
+
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+    animate();
+}
+
 
 document.getElementById('feedback-form').addEventListener('submit', (e) => {
     e.preventDefault();
