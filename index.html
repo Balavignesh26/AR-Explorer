@@ -45,6 +45,7 @@
                     <option value="Taj_Mahal">Taj Mahal, Agra</option>
                 </select>
                 <button id="explore-button" aria-label="Explore selected landmark">Explore</button>
+                <button id="view-charminar-ar" aria-label="View Charminar in AR" style="margin-left: 10px; background: #28a745;">View Charminar AR</button>
             </div>
 
             <div class="loading-container" id="loading-animation" role="status" aria-live="polite" hidden>
@@ -63,7 +64,7 @@
                         ar-modes="webxr scene-viewer quick-look" camera-controls poster="placeholder.jpg"
                         style="width: 100%; height: 200px;" hidden></model-viewer>
                     <div id="fbx-viewer" style="width:100%; height:500px; display:none;"></div>
-                    <button id="ar-button" aria-label="View in Augmented Reality">View in AR</button>
+                    <button id="view-ar-button" aria-label="View in Augmented Reality">View in AR</button>
                     <img id="thumbnail" alt="Landmark thumbnail" loading="lazy"
                         aria-describedby="landmark-summary-wiki" />
                     <div class="gallery" id="gallery" hidden>
@@ -102,11 +103,10 @@
         </nav>
     </footer>
 
+    <script src="../libs/three.min.js"></script>
+    <script src="../libs/FBXLoader.js"></script>
+    <script src="../libs/orbitcontrols.js"></script>
     <script src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/examples/js/loaders/FBXLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/examples/js/controls/OrbitControls.js"></script>
-
 </body>
 
 </html>
