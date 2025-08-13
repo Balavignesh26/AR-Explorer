@@ -62,6 +62,8 @@
                     <model-viewer id="ar-preview" src="" alt="3D model of landmark" ar
                         ar-modes="webxr scene-viewer quick-look" camera-controls poster="placeholder.jpg"
                         style="width: 100%; height: 200px;" hidden></model-viewer>
+                    <div id="fbx-viewer" style="width:100%; height:500px; display:none;"></div>
+                    <button id="ar-button" aria-label="View in Augmented Reality">View in AR</button>
                     <img id="thumbnail" alt="Landmark thumbnail" loading="lazy"
                         aria-describedby="landmark-summary-wiki" />
                     <div class="gallery" id="gallery" hidden>
@@ -70,8 +72,6 @@
                     </div>
                     <p id="landmark-summary-wiki"></p>
                     <p id="fun-facts" hidden></p>
-                    <button class="ar-button" id="view-ar-button" aria-label="View in Augmented Reality">View in
-                        AR</button>
                 </div>
                 <div id="google-info" class="info-card" role="region" aria-labelledby="landmark-name-google">
                     <h2 id="landmark-name-google"></h2>
@@ -103,6 +103,10 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/examples/js/loaders/FBXLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.153.0/examples/js/controls/OrbitControls.js"></script>
+
 </body>
 
 </html>
