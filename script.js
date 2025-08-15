@@ -6,7 +6,7 @@ if (typeof THREE === 'undefined') {
     console.log('Three.js loaded successfully, version:', THREE.REVISION);
 }
 
-const GOOGLE_API_KEY = 'AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg'; // Free API key for development
+const GOOGLE_API_KEY = 'updated Api key here'; // Free API key for development
 
 // Global variables
 let currentScene = null;
@@ -1437,3 +1437,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
